@@ -51,6 +51,63 @@ function preload ()
     this.load.image('bomb', 'assets/bomb.png');
     this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
 }
+class Example extends Phaser.Scene
+{
+    constructor ()
+    {
+        super();
+    }
+
+    create ()
+    {
+        this.graphics = this.add.graphics();
+
+        this.shapes = new Array(25).fill(null).map(
+            () => new Phaser.Geom.Circle(Phaser.Math.Between(0, 800), Phaser.Math.Between(0, 800), Phaser.Math.Between(1, 1))
+        );
+
+        this.rect = Phaser.Geom.Rectangle.Clone(this.cameras.main);
+    }
+
+    update ()
+    {
+        this.shapes.forEach(function (shape, i) {
+            shape.x += (10 + 0.1 * i);
+            shape.y += (1 + 0.1 * i);
+        });
+
+        Phaser.Actions.WrapInRectangle(this.shapes, this.rect, 5);
+
+        this.draw();
+    }
+
+    // Locals methods, they are not part of Phaser.scene
+    color (i)
+    {
+        return 0xffffff * (i % 20) + 0xffffff * (i % 5);
+    }
+
+    draw ()
+    {
+        this.graphics.clear();
+
+        this.shapes.forEach((shape, i) => {
+            this.graphics
+            .fillStyle(this.color(i), 0.9)
+            .fillCircleShape(shape);
+        }, this);
+    }
+}
+
+const config = {
+    type: Phaser.AUTO,
+    width: 900,
+    height: 800,
+    parent: 'phaser-example',
+    scene: [ Example ]
+};
+
+const game = new Phaser.Game(config);
 
 function create ()
 {

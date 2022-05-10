@@ -49,7 +49,7 @@ function preload ()
     this.load.image('ground', 'assets/platform.png');
     this.load.image('star', 'assets/star.png');
     this.load.image('Spike', 'assets/Spike.png');
-    this.load.spritesheet('CubeAvatar', 'assets/player.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.image('CubeAvatar', 'assets/player.png'/*, { frameWidth: 32, frameHeight: 48 }*/);
 }
 class Example extends Phaser.Scene
 {
@@ -99,21 +99,13 @@ class Example extends Phaser.Scene
     }
 }
 
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'phaser-example',
-    scene: [ Example ]
-};
 
-const game = new Phaser.Game(config);
 
 
 function create ()
 {
     //  A simple background for our game
-    this.add.image(400, 300, 'Background');
+    this.add.image(200, 350, 'Background');
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
@@ -128,10 +120,10 @@ function create ()
     //platforms.create(750, 220, 'ground');
 
     // The player and its settings
-    player = this.physics.add.sprite(100, 450, 'CubeAvatar');
+    player = this.physics.add.sprite(200, 300, 'CubeAvatar');
 
     //  Player physics properties. Give the little guy a slight bounce.
-    player.setBounce(0.2);
+    player.setBounce(0.1);
     player.setCollideWorldBounds(true);
 
     //  Our player animations, turning, walking left and walking right.
@@ -180,7 +172,7 @@ function create ()
     bombs = this.physics.add.group();
 
     //  The score
-    scoreText = this.add.text(16, 16, 'SCORE: 0', { fontSize: '42px', fill: '#fffff' });
+    scoreText = this.add.text(16, 16, 'SCORE: 0', { fontSize: '42px', fill: '#ffffff' });
 
     //  Collide the player and the stars with the platforms
     this.physics.add.collider(player, platforms);
@@ -200,6 +192,8 @@ function update ()
         return;
     }
 
+    /*
+
     if (cursors.left.isDown)
     {
         player.setVelocityX(-160);
@@ -212,6 +206,7 @@ function update ()
 
         //player.anims.play('right', true);
     }
+    */
     else
     {
         player.setVelocityX(0);

@@ -21,7 +21,7 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: { y: 350 },
             debug: false
         }
     },
@@ -37,6 +37,9 @@ var Spike;
 var platforms;
 var cursors;
 var gameOver = false;
+var player;
+var cameras;
+
 
 var game = new Phaser.Game(config);
 
@@ -53,7 +56,29 @@ function preload ()
 function create ()
 {
     //  A simple background for our game
-    this.add.image(360, 300, 'Background').setScale(2.5);
+    this.add.image(360, 300, 'Background').setScale(2.7);
+    this.add.image(740, 300, 'Background').setScale(2.7);
+    this.add.image(1100, 300, 'Background').setScale(2.7);
+    this.add.image(1360, 300, 'Background').setScale(2.7);
+    this.add.image(1760, 300, 'Background').setScale(2.7);
+    this.add.image(2060, 300, 'Background').setScale(2.7);
+    this.add.image(2360, 300, 'Background').setScale(2.7);
+    this.add.image(2660, 300, 'Background').setScale(2.7);
+    this.add.image(2960, 300, 'Background').setScale(2.7);
+    this.add.image(3260, 300, 'Background').setScale(2.7);
+    this.add.image(3560, 300, 'Background').setScale(2.7);
+    this.add.image(3860, 300, 'Background').setScale(2.7);
+    this.add.image(4160, 300, 'Background').setScale(2.7);
+    this.add.image(4460, 300, 'Background').setScale(2.7);
+    this.add.image(4760, 300, 'Background').setScale(2.7);
+    this.add.image(5060, 300, 'Background').setScale(2.7);
+    this.add.image(5360, 300, 'Background').setScale(2.7);
+    this.add.image(5660, 300, 'Background').setScale(2.7);
+    this.add.image(5960, 300, 'Background').setScale(2.7);
+    this.add.image(6260, 300, 'Background').setScale(2.7);
+    this.add.image(6560, 300, 'Background').setScale(2.7);
+
+    this.cameras.main.setBounds(0, 0, 7000 * 1, 176);
 
     //  The platforms group contains the ground and the 2 ledges we can jump on
     platforms = this.physics.add.staticGroup();
@@ -61,20 +86,28 @@ function create ()
     //  Here we create the ground.
     //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
     platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+    //platforms.create(400, 1136, 'ground').setScale(2).refreshBody();
 
     //  Now let's create some ledges
-    platforms.create(850, 400, 'ground');
-    platforms.create(1700, 600, 'ground');
-    platforms.create(2550, 568, 'ground');
-
-    /*
-    platforms.create(850, 400, 'ground');
-    platforms.create(1700, 600, 'ground');
-    platforms.create(2550, 568, 'ground');
-    platforms.create(850, 400, 'ground');
-    platforms.create(1700, 600, 'ground');
-    platforms.create(2550, 568, 'ground');
-    */
+    platforms.create(1050, 400, 'ground');
+    platforms.create(1900, 500, 'ground');
+    platforms.create(2550, 400, 'ground');
+    platforms.create(3200, 300, 'ground');
+    platforms.create(3900, 500, 'ground');
+    platforms.create(4600, 400, 'ground');
+    platforms.create(5300, 300, 'ground');
+    platforms.create(6000, 400, 'ground');
+    platforms.create(6700, 300, 'ground');
+    platforms.create(1050, 400, 'ground');
+    platforms.create(1900, 500, 'ground');
+    platforms.create(2550, 400, 'ground');
+    platforms.create(3200, 300, 'ground');
+    platforms.create(3900, 500, 'ground');
+    platforms.create(4600, 400, 'ground');
+    platforms.create(5300, 300, 'ground');
+    platforms.create(6000, 400, 'ground');
+    platforms.create(6700, 300, 'ground');
+    
 
     // The player and its settings
     player = this.physics.add.sprite(200, 300, 'CubeAvatar');
@@ -84,11 +117,14 @@ function create ()
 
     //  Player physics properties. Give the little guy a slight bounce.
     player.setBounce(0.1);
-    player.setCollideWorldBounds(true);
+    //player.setCollideWorldBounds(true);
+    this.physics.add.collider(player, platforms);
+    player.setVelocityX(250);
 
-
+    //this.cameras.main.setBounds(0, 0, 7000 * 1, 176);
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
+    this.cameras.main.startFollow(player, true);
 
     bombs = this.physics.add.group();
 
@@ -96,7 +132,7 @@ function create ()
     //scoreText = this.add.text(16, 16, 'SCORE: 0', { fontSize: '42px', fill: '#ffffff' });
 
     //  Collide the player and the stars with the platforms
-    this.physics.add.collider(player, platforms);
+    
     //this.physics.add.collider(stars, platforms);
     this.physics.add.collider(bombs, platforms);
 
@@ -119,140 +155,36 @@ function update ()
     
     else
     {
-        player.setVelocityX(0);
-
-        //player.anims.play('turn');
+        player.setVelocityX(250);
     }
 
     if (cursors.up.isDown && player.body.touching.down)
     {
         player.setVelocityY(-330);
     }
+
+    const cam = this.cameras.main;
+
+        if (this.cursors && this.player.body.touching.down)
+        {
+            this.player.setVelocityY(-400);
+        }
+
 }
 
-function hitSpike (player, Spike)
+function hitSpike (player, setCollideWorldBounds)
 {
     this.physics.pause();
 
     player.setTint(0xff0000);
 
-    player.anims.play('turn');
+    //player.anims.play('turn');
 
     gameOver = true;
 }
 
 
 
-/*
-class Example extends Phaser.Scene
-{
-    constructor ()
-    {
-        super();
-    }
-
-    create ()
-    {
-        this.graphics = this.add.graphics();
-
-        this.shapes = new Array(30).fill(null).map(
-            () => new Phaser.Geom.Circle(Phaser.Math.Between(0, 800), Phaser.Math.Between(0, 200), Phaser.Math.Between(0.5, 2))
-        );
-
-        this.rect = Phaser.Geom.Rectangle.Clone(this.cameras.main);
-    }
-
-    update ()
-    {
-        this.shapes.forEach(function (shape, i) {
-            shape.x -= (i + 0.1 * 1);
-            shape.y += (1 + 0.1 * i);
-        });
-
-        Phaser.Actions.WrapInRectangle(this.shapes, this.rect, 75);
-
-        this.draw();
-    }
-
-    // Locals methods, they are not part of Phaser.scene
-    color (i)
-    {
-        return 0xfffff * (i % 50) + 0xfffff * (i % 5);
-    }
-
-    draw ()
-    {
-        this.graphics.clear();
-
-        this.shapes.forEach((shape, i) => {
-            this.graphics
-            .fillStyle(this.color(i), 0.7) 
-            .fillCircleShape(shape);
-        }, this);
-    }
-}
-
-*/
-
-    //  Some stars to collect, 12 in total, evenly spaced 70 pixels apart along the x axis
-    /*
-    stars = this.physics.add.group({
-        key: 'star',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 }
-    });
-    
-    stars.children.iterate(function (child) {
-
-        //  Give each star a slightly different bounce
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-
-    });
-    */
-   /*
-function collectStar (player, star)
-{
-    star.disableBody(true, true);
-
-    //  Add and update the score
-    score += 10;
-    scoreText.setText('Score: ' + score);
-
-    if (stars.countActive(true) === 0)
-    {
-        //  A new batch of stars to collect
-        stars.children.iterate(function (child) {
-
-            child.enableBody(true, child.x, 0, true, true);
-
-        });
-
-        var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-
-        var bomb = bombs.create(x, 10, 'Spike');
-        //bomb.setBounce(1);
-        //bomb.setCollideWorldBounds(true);
-        bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
-        bomb.allowGravity = false;
-
-    }
-}
-*/
-/*
-
-    if (cursors.left.isDown)
-    {
-        
-
-        //player.anims.play('left', true);
-    }
-    else if (cursors.right.isDown)
-    {
-        player.setVelocityX(160);
-
-        //player.anims.play('right', true);
-    }
-    */
 
 </script>
 

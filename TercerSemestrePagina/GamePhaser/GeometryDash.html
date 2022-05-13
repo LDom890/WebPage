@@ -43,6 +43,7 @@ var cameras;
 
 var game = new Phaser.Game(config);
 
+
 function preload ()
 {
     this.load.image('Background', 'assets/BackgroundGeometry.png');
@@ -142,14 +143,13 @@ function create ()
     this.physics.add.collider(player, bombs, hitSpike, null, this);
 }
 
+
 function update ()
 {
-    if (gameOver)
+    if (player.y > 600 || player.x > 6750)
     {
-        this.registry.destroy();
-        this.events.off();
-        this.scene.restart();
-        return;
+       gameOver = true;
+        
     }
 
     
@@ -172,15 +172,16 @@ function update ()
 
 }
 
+
 function hitSpike (player, setCollideWorldBounds)
 {
     this.physics.pause();
 
-    player.setTint(0xff0000);
+    //player.setTint(0xff0000);
 
     //player.anims.play('turn');
 
-    gameOver = true;
+    
 }
 
 
